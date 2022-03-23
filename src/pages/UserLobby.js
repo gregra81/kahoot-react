@@ -1,69 +1,99 @@
-import React, { useEffect } from 'react';
-import Alert from 'react-bootstrap/Alert';
-import Card from 'react-bootstrap/Card';
+import React, { useEffect, useState } from 'react';
 import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
+import { parse } from 'query-string';
+import ImagePng from '../assets/image.png'
+
+const getUserData = (search) => {
+  const {pin = 553530, playerName = 'defaultUserName'} = search;
+  return new Promise(resolve => (
+    setTimeout(() => resolve({pin, playerName }), 500)
+  )
+)};
 
 const UserLobby = (props) => {
   const history = useHistory();
   const data = useLocation();
-  const [playerNameState, pinState] = data.state;
+  const [ userPin, setUserPin ] = useState(null);
+  const [ userName, setUserName ] = useState(null);
 
-  const playerName = playerNameState.playerName;
-  const pin = pinState.pin;
+  useEffect(() => {
+    const fetchUser = async() => {
+      const search = parse(data.search);
+      const { sessionId, userEmail } = search;
+      if (sessionId && userEmail) {
+        const { pin, playerName }  = await getUserData(search, sessionId, userEmail);
+        console.log(pin, playerName)
+        setUserPin(pin);
+        setUserName(playerName);
+      }
+    }
+    fetchUser()
+  }, []); //eslint-disable-line 
+
   const { setSocketUser, socketUser, BASE_URL } = props;
 
   useEffect(() => {
-    if (!socketUser) {
-      let newSocketUser;
-
-      if (BASE_URL === 'http://localhost:3030') {
-        newSocketUser = socketIO(`/${pin}`, {
-          query: `playerName=${playerName}`,
-        });
-      } else {
-        newSocketUser = socketIO(`${BASE_URL}/${pin}`, {
-          query: `playerName=${playerName}`,
+    if (userPin && userName) {
+      if (!socketUser) {
+        let newSocketUser;
+  
+        if (BASE_URL === 'http://localhost:3030') {
+          newSocketUser = socketIO(`/${userPin}`, {
+            query: `playerName=${userName}`,
+          });
+        } else {
+          newSocketUser = socketIO(`${BASE_URL}/${userPin}`, {
+            query: `playerName=${userName}`,
+          });
+        }
+  
+        setSocketUser(newSocketUser);
+      }
+  
+      if (socketUser) {
+        socketUser.on('question', (data) => {
+          props.setTriviaDataUser(data);
+          history.push('/user/trivia');
         });
       }
-
-      setSocketUser(newSocketUser);
     }
-
-    if (socketUser) {
-      socketUser.on('question', (data) => {
-        props.setTriviaDataUser(data);
-        history.push('/user/trivia');
-      });
-    }
-  }, [history, props, setSocketUser, pin, socketUser, BASE_URL, playerName]);
+  }, [history, props, setSocketUser, socketUser, BASE_URL, userPin, userName]);
   return (
     <body className="bg-primary">
-      <div>
-        <div className="container h-center v-center">
-          <Alert className="lobby-pin border-dark" variant="primary">
-            The PIN of the room is {pin}
-          </Alert>
-          <Alert className="lobby-nick border-dark" variant="primary">
-            Your nick is {playerName}
-          </Alert>
+      {userPin && userName ? (
+        <div className='main-wrapper'>
+          <div className='image-wrapper'>
+            <img
+              src={ImagePng}
+              style={{ width: 50 }}
+              alt=""
+            />
+          </div>
+          <div className='welcome-container welcome-header'>
+            <div className='v-center'>Welcome to</div>
+            <div className='v-center'>Quizzabo</div>
+          </div>
+          <div className='welcome-container'>
+            <ul className='header-list'>
+              <li>
+                Listen to the session
+              </li>
+              <li>
+                Answer questions related to the session content
+              </li>
+              <li>
+                win an awesome price!
+              </li>
+            </ul>
+          </div>
+          <div className='welcome-container footer-container'>
+            <div>
+              The game will start shortly!
+            </div>
+          </div>
         </div>
-        <br />
-        <div className="container">
-          <Card className="bg-secondary" style={{ width: '18rem' }}>
-            <Card.Body>
-              <Card.Title className="text-white">Welcome to Kahoot!</Card.Title>
-              <Card.Subtitle className="mb-2 text-info">
-                Waiting for the host to start
-              </Card.Subtitle>
-              <Card.Text className="text-white">
-                The game will start when the host decides to, meanwhile you can give the PIN to your
-                friends so they can play with you!
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
+      ) : ( <div className='container h-center v-center'>Loading...</div> )}
     </body>
   );
 };
