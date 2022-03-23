@@ -36,7 +36,7 @@ const DashBoard = () => {
   }, [dataLoaded]);
 
   return (
-    <body className="bg-primary">
+    <body>
       {dataLoaded ? (
         <div className="bg-primary">
           <h1 className="text-center">Statistics</h1>

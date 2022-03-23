@@ -16,7 +16,7 @@ const UserHome = () => {
   };
   return (
     <React.Fragment>
-      <body className="masthead bg-primary">
+      <body className="masthead">
         <div>
           <div className="container text-white mb-0 pb-2">
             <input

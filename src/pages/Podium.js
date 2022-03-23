@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 const Podium = (props) => {
   return (
     <React.Fragment>
-      <body className="bg-primary">
+      <body>
         <Container>
           <div>
             {Object.entries(props.ranking).map(([keyValue, value]) => {

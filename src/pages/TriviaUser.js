@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import StopGame from '../components/StopGame';
 import Questions from '../components/Questions';
 import Countdown from '../components/Countdown';
 import '../styles/TriviaUser.css';
@@ -75,13 +74,6 @@ const Trivia = (props) => {
           ))}
         </div>}
       <br />
-      <Container>
-        <StopGame
-          socket={socketUser}
-          setSocketUser={props.setSocketUser}
-          setSocket={props.setSocket}
-        />
-      </Container>
     </body>
   ) : (
     'Loading trivia...'
