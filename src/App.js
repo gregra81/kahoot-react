@@ -87,7 +87,7 @@ function App() {
     };
 
     fetchData();
-  }, [accountId, eventId, sessionId, userId, userEmail]);
+  }, [accountId, eventId, sessionId, userEmail]);
 
   return (
     <div className="App">
