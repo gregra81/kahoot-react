@@ -77,7 +77,6 @@ function App() {
         const { playerName } = await getPlayer(
           accountId,
           eventId,
-          sessionId,
           userEmail
         );
 
