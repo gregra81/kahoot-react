@@ -59,7 +59,7 @@ const UserLobby = (props) => {
     }
   }, [history, props, setSocketUser, socketUser, BASE_URL, userPin, userName]);
   return (
-    <body className="bg-primary">
+    <body>
       {userPin && userName ? (
         <div className='main-wrapper'>
           <div className='image-wrapper'>

@@ -12,7 +12,7 @@ const WaitQuestion = (props) => {
     }
   }, [socketUser, setTriviaDataUser, history])
   return (
-    <body className="bg-primary">
+    <body>
       <div className='wait_container h-center v-center'>
         <div className='text_container'>
           Next question coming soon.

@@ -36,7 +36,7 @@ const Trivia = (props) => {
   }, [onGameEnd, socketUser, props.history]);
 
   return props.triviaData ? (
-    <body className="bg-primary">
+    <body>
       <div className="text-center text-white bg-secondary text-uppercase">
         <Countdown counter={counter} />
       </div>
