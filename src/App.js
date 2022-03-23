@@ -14,6 +14,7 @@ import TriviaUser from "./pages/TriviaUser";
 import UserHome from "./pages/UserHome";
 import UserLobby from "./pages/UserLobby";
 import WaitQuestion from "./pages/WaitQuestion";
+import { stringify } from 'query-string';
 
 let BASE_URL = config.serverUrl;
 
@@ -33,9 +34,10 @@ async function getTriviaForSession(accountId, eventId, sessionId) {
   return data;
 }
 
-async function getPlayer(accountId, eventId, userId, userEmail) {
+async function getPlayer(accountId, eventId, email) {
+  const params = stringify({accountId, eventId, email})
   const response = await fetch(
-    `${BASE_URL}/player/?accountId=${accountId}&eventId=${eventId}&userId=${userId}&email=${userEmail}`
+    `${BASE_URL}/player?${params}`
   );
   const data = await response.json();
   return data;
@@ -62,12 +64,11 @@ function App() {
   const accountId = query.get("accountId");
   const eventId = query.get("eventId");
   const sessionId = query.get("sessionId");
-  const userId = query.get("userId");
   const userEmail = query.get("userEmail");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (accountId && eventId && sessionId && userId && userEmail) {
+      if (accountId && eventId && sessionId && userEmail) {
         const { trivia, pin } = await getTriviaForSession(
           accountId,
           eventId,
@@ -76,7 +77,6 @@ function App() {
         const { playerName } = await getPlayer(
           accountId,
           eventId,
-          userId,
           userEmail
         );
 
@@ -87,7 +87,7 @@ function App() {
     };
 
     fetchData();
-  }, [accountId, eventId, sessionId, userId, userEmail]);
+  }, [accountId, eventId, sessionId, userEmail]);
 
   return (
     <div className="App">

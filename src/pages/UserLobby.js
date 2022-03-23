@@ -1,38 +1,13 @@
 import React, { useEffect } from 'react';
 import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
-// import { parse } from 'query-string';
 import ImagePng from '../assets/image.png'
 
-// const getUserData = (search) => {
-//   const {pin = 553530, playerName = 'defaultUserName'} = search;
-//   return new Promise(resolve => (
-//     setTimeout(() => resolve({pin, playerName }), 500)
-//   )
-// )};
-
 const UserLobby = (props) => {
-  console.log('UserLobby props: ', props);
   const history = useHistory();
   const data = useLocation();
   const { state } = data;
   const [ userName, userPin ] = state;
-  // const [ userPin, setUserPin ] = useState(pin);
-  // const [ userName, setUserName ] = useState(playerName);
-
-  // useEffect(() => {
-  //   const fetchUser = async() => {
-  //     const search = parse(data.search);
-  //     const { sessionId, userEmail } = search;
-  //     if (sessionId && userEmail) {
-  //       const { pin, playerName }  = await getUserData(search, sessionId, userEmail);
-  //       setUserPin(pin);
-  //       setUserName(playerName);
-  //     }
-  //   }
-  //   fetchUser()
-  // }, []); //eslint-disable-line 
-
   const { setSocketUser, socketUser, BASE_URL } = props;
 
   useEffect(() => {

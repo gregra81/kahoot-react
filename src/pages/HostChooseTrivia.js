@@ -12,7 +12,7 @@ const HostChooseTrivia = (props) => {
   const [pin, setPin] = useState('');
 
   useEffect(() => {
-    fetch(`https://${config.serverUrl}/trivialist`)
+    fetch(`${config.serverUrl}/trivialist`)
       .then((res) => res.json())
       .then((result) => {
         setTriviaList(result.triviaList);
