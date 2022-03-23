@@ -16,7 +16,7 @@ import UserLobby from './pages/UserLobby';
 let BASE_URL;
 
 if (process.env.NODE_ENV === 'production') {
-  BASE_URL = 'inmental-kahoot-clone.herokuapp.com';
+  BASE_URL = 'kahoot-clone-bizzabo.herokuapp.com';
 } else if (process.env.NODE_ENV === 'development') {
   BASE_URL = 'http://localhost:3030';
 }
