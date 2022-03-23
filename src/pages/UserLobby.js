@@ -3,14 +3,28 @@ import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
+import { parse } from 'query-string';
 
 const UserLobby = (props) => {
   const history = useHistory();
   const data = useLocation();
-  const [playerNameState, pinState] = data.state;
+  let playerName, pin;
+  console.log(data.state)
+  if (data.state) {
+    const [playerNameState, pinState] = data?.state;
 
-  const playerName = playerNameState.playerName;
-  const pin = pinState.pin;
+  playerName = playerNameState.playerName;
+  pin = pinState.pin;
+  }
+
+  const search = parse(data.search);
+  if (search.playerName && search.pin) {
+    playerName = search.playerName;
+    pin = search.pin;
+  }
+  // if (playerName || pin) {
+  //   history.replace({ search: '' });
+  // }
   const { setSocketUser, socketUser, BASE_URL } = props;
 
   useEffect(() => {
@@ -41,24 +55,26 @@ const UserLobby = (props) => {
     <body className="bg-primary">
       <div>
         <div className="container h-center v-center">
-          <Alert className="lobby-pin border-dark" variant="primary">
+          {/* <Alert className="lobby-pin border-dark" variant="primary">
             The PIN of the room is {pin}
           </Alert>
           <Alert className="lobby-nick border-dark" variant="primary">
             Your nick is {playerName}
+          </Alert> */}
+          <Alert className="lobby-pin border-dark" variant="primary">
+            congratulation!
           </Alert>
         </div>
         <br />
         <div className="container">
           <Card className="bg-secondary" style={{ width: '18rem' }}>
             <Card.Body>
-              <Card.Title className="text-white">Welcome to Kahoot!</Card.Title>
+              <Card.Title className="text-white">Welcome to Bahoot!</Card.Title>
               <Card.Subtitle className="mb-2 text-info">
                 Waiting for the host to start
               </Card.Subtitle>
               <Card.Text className="text-white">
-                The game will start when the host decides to, meanwhile you can give the PIN to your
-                friends so they can play with you!
+                The game will start when the host decides to, meanwhile you can enjoy the session!
               </Card.Text>
             </Card.Body>
           </Card>
