@@ -12,6 +12,7 @@ import Trivia from './pages/Trivia';
 import TriviaUser from './pages/TriviaUser';
 import UserHome from './pages/UserHome';
 import UserLobby from './pages/UserLobby';
+import WaitQuestion from './pages/WaitQuestion';
 
 let BASE_URL;
 
@@ -73,6 +74,13 @@ function App() {
             setTriviaDataUser={setTriviaDataUser}
           />
         </Route>
+        <Route path='/user/wait_question'>
+          <WaitQuestion
+            socketUser={socketUser}
+            setTriviaDataUser={setTriviaDataUser}
+            history={history}
+          />
+        </Route>
         <Route path="/user/trivia">
           <TriviaUser
             socket={socketUser}
@@ -81,6 +89,7 @@ function App() {
             triviaData={triviaDataUser}
             setSocketUser={setSocketUser}
             setSocket={setSocket}
+            history={history}
           />
         </Route>
         <Route path="/host/trivia">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import StopGame from '../components/StopGame';
 import Questions from '../components/Questions';
 import Countdown from '../components/Countdown';
@@ -9,6 +9,9 @@ import Alert from 'react-bootstrap/Alert';
 const Trivia = (props) => {
   const [isClicked, setIsClicked] = useState('');
   const [isDisabled, setIsDisabled] = useState('');
+  const [counter, setCounter] = useState(20);
+  const timer = useRef();
+
 
   const onGameEnd = props.onGameEnd;
   const { socketUser } = props;
@@ -18,16 +21,24 @@ const Trivia = (props) => {
       socketUser.on('podium', (podium) => {
         onGameEnd(podium);
       });
+      socketUser.on('timer', (counter) => {
+        setCounter(counter);
+        if (counter === 0 ) {
+          timer.current = setTimeout(() => {
+            props.history.push('/user/wait_question');
+          }, 10000);
+        }
+      });
     }
     setIsClicked(false);
     setIsDisabled('');
     return () => {};
-  }, [onGameEnd, socketUser]);
+  }, [onGameEnd, socketUser, props.history]);
 
   return props.triviaData ? (
     <body className="bg-primary">
       <div className="text-center text-white bg-secondary text-uppercase">
-        <Countdown socket={socketUser} />
+        <Countdown counter={counter} />
       </div>
 
       <Container className="d-flex align-items-center justify-content-center text-center">
@@ -48,7 +59,7 @@ const Trivia = (props) => {
           <button
             id={`answer${index}`}
             key={`index-${index}`}
-            className={`answer-trivia${index}  text-white text-center answer-trivia d-flex flex-wrap w-50 border p-3 ${isDisabled} ${
+            className={`answer-trivia${index}  text-white text-center answer-trivia d-flex flex-wrap w-100 border p-3 ${isDisabled} ${
               isClicked === option.description ? 'selected' : ''
             }`}
             onClick={() => {
