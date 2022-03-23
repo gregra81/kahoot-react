@@ -3,6 +3,8 @@ import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 import ImagePng from '../assets/image.png'
+import config from '../config';
+import { stringify } from 'query-string';
 
 const getUserData = (search) => {
   const {pin = 553530, playerName = 'defaultUserName'} = search;
@@ -20,10 +22,21 @@ const UserLobby = (props) => {
   useEffect(() => {
     const fetchUser = async() => {
       const search = parse(data.search);
-      const { sessionId, userEmail } = search;
-      if (sessionId && userEmail) {
-        const { pin, playerName }  = await getUserData(search, sessionId, userEmail);
-        setUserPin(pin);
+      const { accountId, eventId, sessionId, userId, email } = search;
+      if (accountId && eventId && sessionId && userId && email) {
+        const stringyString = stringify({
+          accountId,
+          eventId,
+          sessionId,
+          userId,
+          email
+        })
+        const url = `${config.serverUrl}/player?${stringyString}`
+        console.log(url)
+        const res  = await fetch(url);
+        const { playerName } = await res.json();
+        console.log(data);
+        setUserPin(sessionId);
         setUserName(playerName);
       }
     }
