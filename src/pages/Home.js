@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 const Home = ({ triviaId, isHost, playerName, pin }) => {
+  console.log("Home props: ", { triviaId, isHost, playerName, pin });
   if (triviaId && pin && playerName) {
     if (isHost) {
       return <Redirect to={{ pathname: "/host/lobby", state: pin }} />;

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, useHistory, useLocation } from "react-router-dom";
-import config from './config';
+import config from "./config";
 
 import "startbootstrap-freelancer/dist/css/styles.css";
 
-import DashBoard from './pages/DashBoard';
-import Home from './pages/Home';
-import HostChooseTrivia from './pages/HostChooseTrivia';
-import HostLobby from './pages/HostLobby';
-import Podium from './pages/Podium';
-import Trivia from './pages/Trivia';
-import TriviaUser from './pages/TriviaUser';
-import UserHome from './pages/UserHome';
-import UserLobby from './pages/UserLobby';
-import WaitQuestion from './pages/WaitQuestion';
+import DashBoard from "./pages/DashBoard";
+import Home from "./pages/Home";
+import HostChooseTrivia from "./pages/HostChooseTrivia";
+import HostLobby from "./pages/HostLobby";
+import Podium from "./pages/Podium";
+import Trivia from "./pages/Trivia";
+import TriviaUser from "./pages/TriviaUser";
+import UserHome from "./pages/UserHome";
+import UserLobby from "./pages/UserLobby";
+import WaitQuestion from "./pages/WaitQuestion";
 
 let BASE_URL = config.serverUrl;
 
@@ -33,9 +33,9 @@ async function getTriviaForSession(accountId, eventId, sessionId) {
   return data;
 }
 
-async function getPlayer(accountId, eventId, userId) {
+async function getPlayer(accountId, eventId, userId, userEmail) {
   const response = await fetch(
-    `${BASE_URL}/player/${accountId}/${eventId}/${userId}`
+    `${BASE_URL}/player/?accountId=${accountId}&eventId=${eventId}&userId=${userId}&email=${userEmail}`
   );
   const data = await response.json();
   return data;
@@ -53,7 +53,6 @@ function App() {
 
   const [_pin, setPin] = useState(null);
   const [_playerName, setPlayerName] = useState(null);
-  const [_isHost, setIsHost] = useState(true);
 
   const onGameEnd = (result) => {
     setPodium(result);
@@ -64,31 +63,31 @@ function App() {
   const eventId = query.get("eventId");
   const sessionId = query.get("sessionId");
   const userId = query.get("userId");
+  const userEmail = query.get("userEmail");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (accountId && eventId && sessionId && userId) {
+      if (accountId && eventId && sessionId && userId && userEmail) {
         const { trivia, pin } = await getTriviaForSession(
           accountId,
           eventId,
           sessionId
         );
-        const { playerName, isHost } = await getPlayer(
+        const { playerName } = await getPlayer(
           accountId,
           eventId,
-          sessionId,
-          userId
+          userId,
+          userEmail
         );
 
         setTrivia(trivia);
         setPin(pin);
         setPlayerName(playerName);
-        setIsHost(isHost);
       }
     };
 
     fetchData();
-  }, [accountId, eventId, sessionId, userId]);
+  }, [accountId, eventId, sessionId, userId, userEmail]);
 
   return (
     <div className="App">
@@ -96,7 +95,15 @@ function App() {
         <Route exact path="/">
           <Home
             triviaId={trivia}
-            isHost={_isHost}
+            isHost={false}
+            playerName={_playerName}
+            pin={_pin}
+          />
+        </Route>
+        <Route exact path="/host">
+          <Home
+            triviaId={trivia}
+            isHost={true}
             playerName={_playerName}
             pin={_pin}
           />
@@ -135,7 +142,7 @@ function App() {
             setTriviaDataUser={setTriviaDataUser}
           />
         </Route>
-        <Route path='/user/wait_question'>
+        <Route path="/user/wait_question">
           <WaitQuestion
             socketUser={socketUser}
             setTriviaDataUser={setTriviaDataUser}
