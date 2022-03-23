@@ -3,6 +3,7 @@ import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
 // import { parse } from 'query-string';
 import ImagePng from '../assets/image.png'
+import config from '../config';
 
 // const getUserData = (search) => {
 //   const {pin = 553530, playerName = 'defaultUserName'} = search;
@@ -45,7 +46,7 @@ const UserLobby = (props) => {
             query: `playerName=${userName}`,
           });
         } else {
-          newSocketUser = socketIO(`${BASE_URL}/${userPin}`, {
+          newSocketUser = socketIO(`${config.socketUrl}/${userPin}`, {
             query: `playerName=${userName}`,
           });
         }

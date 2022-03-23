@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import '../styles/HostLobby.css';
 import socketIO from 'socket.io-client';
 import Players from '../components/Players';
+import config from '../config';
 
 const HostLobby = (props) => {
   const [players, setPlayers] = useState([]);
@@ -21,7 +22,7 @@ const HostLobby = (props) => {
         if (BASE_URL === 'http://localhost:3030') {
           newSocketHost = socketIO(`/${pin}`);
         } else {
-          newSocketHost = socketIO(`${BASE_URL}/${pin}`);
+          newSocketHost = socketIO(`${config.socketUrl}/${pin}`);
         }
         props.setSocket(newSocketHost);
       });
