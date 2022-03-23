@@ -1,5 +1,5 @@
 const config = {
-    serverUrl: 'kahoot-clone-bizzabo.herokuapp.com'
+    serverUrl: 'https://kahoot-clone-bizzabo.herokuapp.com'
 }
 
 export default config;
