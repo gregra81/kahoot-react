@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
+import config from './config';
 
 import 'startbootstrap-freelancer/dist/css/styles.css';
 
@@ -13,13 +14,13 @@ import TriviaUser from './pages/TriviaUser';
 import UserHome from './pages/UserHome';
 import UserLobby from './pages/UserLobby';
 
-let BASE_URL;
+let BASE_URL = config.serverUrl;
 
-if (process.env.NODE_ENV === 'production') {
-  BASE_URL = 'kahoot-clone-bizzabo.herokuapp.com';
-} else if (process.env.NODE_ENV === 'development') {
-  BASE_URL = 'http://localhost:3030';
-}
+// if (process.env.NODE_ENV === 'production') {
+//   BASE_URL = 'kahoot-clone-bizzabo.herokuapp.com';
+// } else if (process.env.NODE_ENV === 'development') {
+//   BASE_URL = 'http://localhost:3030';
+// }
 
 function App() {
   const [trivia, setTrivia] = useState(null);

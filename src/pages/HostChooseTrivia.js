@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 import triviaImg from '../assets/trivia.svg';
 
@@ -11,7 +12,7 @@ const HostChooseTrivia = (props) => {
   const [pin, setPin] = useState('');
 
   useEffect(() => {
-    fetch('/trivialist')
+    fetch(`https://${config.serverUrl}/trivialist`)
       .then((res) => res.json())
       .then((result) => {
         setTriviaList(result.triviaList);
