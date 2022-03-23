@@ -1,0 +1,19 @@
+.clicked {
+  pointer-events: none;
+}
+
+#answer0 {
+  background-color: red;
+}
+
+#answer1 {
+  background-color: blue;
+}
+
+#answer2 {
+  background-color: goldenrod;
+}
+
+#answer3 {
+  background-color: forestgreen;
+}
