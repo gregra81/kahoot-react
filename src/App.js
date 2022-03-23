@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 import config from './config';
 
-import 'startbootstrap-freelancer/dist/css/styles.css';
+import "startbootstrap-freelancer/dist/css/styles.css";
 
 import DashBoard from './pages/DashBoard';
 import Home from './pages/Home';
@@ -17,11 +17,29 @@ import WaitQuestion from './pages/WaitQuestion';
 
 let BASE_URL = config.serverUrl;
 
-// if (process.env.NODE_ENV === 'production') {
-//   BASE_URL = 'kahoot-clone-bizzabo.herokuapp.com';
-// } else if (process.env.NODE_ENV === 'development') {
-//   BASE_URL = 'http://localhost:3030';
-// }
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
+async function getTriviaForSession(accountId, eventId, sessionId) {
+  const response = await fetch(
+    `${BASE_URL}/trivia/${accountId}/${eventId}/${sessionId}`
+  );
+  const data = await response.json();
+  return data;
+}
+
+async function getPlayer(accountId, eventId, userId) {
+  const response = await fetch(
+    `${BASE_URL}/player/${accountId}/${eventId}/${userId}`
+  );
+  const data = await response.json();
+  return data;
+}
 
 function App() {
   const [trivia, setTrivia] = useState(null);
@@ -31,17 +49,57 @@ function App() {
   const [triviaDataUser, setTriviaDataUser] = useState({ options: [] });
   const [podium, setPodium] = useState([]);
   const history = useHistory();
+  const query = useQuery();
+
+  const [_pin, setPin] = useState(null);
+  const [_playerName, setPlayerName] = useState(null);
+  const [_isHost, setIsHost] = useState(true);
 
   const onGameEnd = (result) => {
     setPodium(result);
-    history.push('/podium');
+    history.push("/podium");
   };
+
+  const accountId = query.get("accountId");
+  const eventId = query.get("eventId");
+  const sessionId = query.get("sessionId");
+  const userId = query.get("userId");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (accountId && eventId && sessionId && userId) {
+        const { trivia, pin } = await getTriviaForSession(
+          accountId,
+          eventId,
+          sessionId
+        );
+        const { playerName, isHost } = await getPlayer(
+          accountId,
+          eventId,
+          sessionId,
+          userId
+        );
+
+        setTrivia(trivia);
+        setPin(pin);
+        setPlayerName(playerName);
+        setIsHost(isHost);
+      }
+    };
+
+    fetchData();
+  }, [accountId, eventId, sessionId, userId]);
 
   return (
     <div className="App">
       <Switch>
         <Route exact path="/">
-          <Home />
+          <Home
+            triviaId={trivia}
+            isHost={_isHost}
+            playerName={_playerName}
+            pin={_pin}
+          />
         </Route>
         <Route path="/podium">
           <Podium
@@ -53,7 +111,9 @@ function App() {
           />
         </Route>
         <Route path="/host/chooseTrivia">
-          <HostChooseTrivia onClickTriviaButton={(selectedTrivia) => setTrivia(selectedTrivia)} />
+          <HostChooseTrivia
+            onClickTriviaButton={(selectedTrivia) => setTrivia(selectedTrivia)}
+          />
         </Route>
         <Route path="/host/lobby">
           <HostLobby

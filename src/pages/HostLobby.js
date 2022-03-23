@@ -3,19 +3,20 @@ import { Link, useLocation } from 'react-router-dom';
 import '../styles/HostLobby.css';
 import socketIO from 'socket.io-client';
 import Players from '../components/Players';
-import config from '../config';
-
 
 const HostLobby = (props) => {
   const [players, setPlayers] = useState([]);
   const data = useLocation();
+
+  console.log('data.state', data.state);
+  
   const pin = data.state;
   const { socket, setTriviaData, BASE_URL } = props;
 
   useEffect(() => {
     console.log('hostsocket', props.socket);
     if (!props.socket) {
-      fetch(`https://${config.serverUrl}/trivia/${pin}/${props.trivia}`).then(() => {
+      fetch(`${BASE_URL}/trivia/${pin}/${props.trivia}`).then(() => {
         let newSocketHost;
         if (BASE_URL === 'http://localhost:3030') {
           newSocketHost = socketIO(`/${pin}`);
