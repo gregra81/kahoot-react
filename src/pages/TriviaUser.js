@@ -24,9 +24,10 @@ const Trivia = (props) => {
       socketUser.on('timer', (counter) => {
         setCounter(counter);
         if (counter === 0 ) {
+          setIsDisabled('clicked')
           timer.current = setTimeout(() => {
             props.history.push('/user/wait_question');
-          }, 10000);
+          }, 2000);
         }
       });
     }
