@@ -41,7 +41,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3030",
   "devDependencies": {
     "@cypress/code-coverage": "^3.8.3",
     "@testing-library/jest-dom": "^5.11.6",

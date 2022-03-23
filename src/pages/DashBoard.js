@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 const DashBoard = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -12,7 +13,7 @@ const DashBoard = () => {
   useEffect(() => {
     if (!dataLoaded) {
       const fetchStats = async () => {
-        const response = await fetch('/stats');
+        const response = await fetch(`https://${config.serverUrl}/stats`);
         const {
           mostPlayedTrivias: newMostPlayedTrivias,
           mostDifficultQuestions: newMostDifficultQuestions,
