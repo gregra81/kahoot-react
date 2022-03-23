@@ -34,8 +34,8 @@ async function getTriviaForSession(accountId, eventId, sessionId) {
   return data;
 }
 
-async function getPlayer(accountId, eventId, userId) {
-  const params = stringify({accountId, eventId, userId})
+async function getPlayer(accountId, eventId, email) {
+  const params = stringify({accountId, eventId, email})
   const response = await fetch(
     `${BASE_URL}/player?${params}`
   );
@@ -65,11 +65,11 @@ function App() {
   const accountId = query.get("accountId");
   const eventId = query.get("eventId");
   const sessionId = query.get("sessionId");
-  const userId = query.get("userId");
+  const userEmail = query.get("userEmail");
 
   useEffect(() => {
     const fetchData = async () => {
-      if (accountId && eventId && sessionId && userId) {
+      if (accountId && eventId && sessionId && userEmail) {
         const { trivia, pin } = await getTriviaForSession(
           accountId,
           eventId,
@@ -79,7 +79,7 @@ function App() {
           accountId,
           eventId,
           sessionId,
-          userId
+          userEmail,
         );
 
         setTrivia(trivia);

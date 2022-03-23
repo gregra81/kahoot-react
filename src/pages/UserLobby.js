@@ -1,53 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import socketIO from 'socket.io-client';
 import { useLocation, useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
 import ImagePng from '../assets/image.png'
-import config from '../config';
-import { stringify } from 'query-string';
 
 const UserLobby = (props) => {
   const history = useHistory();
   const data = useLocation();
-  const [ gamePin, setGamePin ] = useState(null);
-  const [ userName, setUserName ] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async() => {
-      const search = parse(data.search);
-      const { accountId, eventId, sessionId, userId, email } = search;
-      if (accountId && eventId && sessionId && userId && email) {
-        const stringyString = stringify({
-          accountId,
-          eventId,
-          sessionId,
-          userId,
-          email
-        })
-        const url = `${config.serverUrl}/player?${stringyString}`
-        console.log(url)
-        const res  = await fetch(url);
-        const { playerName } = await res.json();
-        setGamePin(sessionId);
-        setUserName(playerName);
-      }
-    }
-    fetchUser()
-  }, []); //eslint-disable-line 
-
+  const { state } = data;
+  const [ userName, userPin ] = state;
   const { setSocketUser, socketUser, BASE_URL } = props;
 
   useEffect(() => {
-    if (gamePin && userName) {
+    if (userPin && userName) {
       if (!socketUser) {
         let newSocketUser;
   
         if (BASE_URL === 'http://localhost:3030') {
-          newSocketUser = socketIO(`/${gamePin}`, {
+          newSocketUser = socketIO(`/${userPin}`, {
             query: `playerName=${userName}`,
           });
         } else {
-          newSocketUser = socketIO(`${BASE_URL}/${gamePin}`, {
+          newSocketUser = socketIO(`${BASE_URL}/${userPin}`, {
             query: `playerName=${userName}`,
           });
         }
@@ -62,10 +35,10 @@ const UserLobby = (props) => {
         });
       }
     }
-  }, [history, props, setSocketUser, socketUser, BASE_URL, gamePin, userName]);
+  }, [history, props, setSocketUser, socketUser, BASE_URL, userPin, userName]);
   return (
-    <body>
-      {gamePin && userName ? (
+    <body className="bg-primary">
+      {userPin && userName ? (
         <div className='main-wrapper'>
           <div className='image-wrapper'>
             <img
