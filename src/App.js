@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, useHistory, useLocation } from "react-router-dom";
+import config from './config';
 
 import "startbootstrap-freelancer/dist/css/styles.css";
 
-import DashBoard from "./pages/DashBoard";
-import Home from "./pages/Home";
-import HostChooseTrivia from "./pages/HostChooseTrivia";
-import HostLobby from "./pages/HostLobby";
-import Podium from "./pages/Podium";
-import Trivia from "./pages/Trivia";
-import TriviaUser from "./pages/TriviaUser";
-import UserHome from "./pages/UserHome";
-import UserLobby from "./pages/UserLobby";
+import DashBoard from './pages/DashBoard';
+import Home from './pages/Home';
+import HostChooseTrivia from './pages/HostChooseTrivia';
+import HostLobby from './pages/HostLobby';
+import Podium from './pages/Podium';
+import Trivia from './pages/Trivia';
+import TriviaUser from './pages/TriviaUser';
+import UserHome from './pages/UserHome';
+import UserLobby from './pages/UserLobby';
+import WaitQuestion from './pages/WaitQuestion';
 
-let BASE_URL;
-
-if (process.env.NODE_ENV === "production") {
-  BASE_URL = "inmental-kahoot-clone.herokuapp.com";
-} else if (process.env.NODE_ENV === "development") {
-  BASE_URL = "http://localhost:3030";
-}
+let BASE_URL = config.serverUrl;
 
 // A custom hook that builds on useLocation to parse
 // the query string for you.
@@ -31,7 +27,7 @@ function useQuery() {
 
 async function getTriviaIdForSession(accountId, eventId, sessionId) {
   const response = await fetch(
-    `${BASE_URL}/api/trivia/${accountId}/${eventId}/${sessionId}`
+    `${BASE_URL}/trivia/${accountId}/${eventId}/${sessionId}`
   );
   const data = await response.json();
   return data;
@@ -39,7 +35,7 @@ async function getTriviaIdForSession(accountId, eventId, sessionId) {
 
 async function getPlayer(accountId, eventId, sessionId, userId) {
   const response = await fetch(
-    `${BASE_URL}/api/player/${accountId}/${eventId}/${sessionId}/${userId}`
+    `${BASE_URL}/player/${accountId}/${eventId}/${sessionId}/${userId}`
   );
   const data = await response.json();
   return data;
@@ -140,6 +136,13 @@ function App() {
             setTriviaDataUser={setTriviaDataUser}
           />
         </Route>
+        <Route path='/user/wait_question'>
+          <WaitQuestion
+            socketUser={socketUser}
+            setTriviaDataUser={setTriviaDataUser}
+            history={history}
+          />
+        </Route>
         <Route path="/user/trivia">
           <TriviaUser
             socket={socketUser}
@@ -148,6 +151,7 @@ function App() {
             triviaData={triviaDataUser}
             setSocketUser={setSocketUser}
             setSocket={setSocket}
+            history={history}
           />
         </Route>
         <Route path="/host/trivia">

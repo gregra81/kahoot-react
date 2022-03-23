@@ -40,3 +40,45 @@ body,
   flex-direction: column;
   align-items: center;
 }
+
+.main-wrapper {
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-header {
+  padding-top: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.header-list{
+  padding-top: 40px;
+  font-size: 18px;
+}
+
+li {
+  padding-top: 10px;
+}
+
+.footer-container {
+  font-size: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: grey;
+}
+
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+}
