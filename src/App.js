@@ -25,7 +25,7 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
-async function getTriviaIdForSession(accountId, eventId, sessionId) {
+async function getTriviaForSession(accountId, eventId, sessionId) {
   const response = await fetch(
     `${BASE_URL}/trivia/${accountId}/${eventId}/${sessionId}`
   );
@@ -33,9 +33,9 @@ async function getTriviaIdForSession(accountId, eventId, sessionId) {
   return data;
 }
 
-async function getPlayer(accountId, eventId, sessionId, userId) {
+async function getPlayer(accountId, eventId, userId) {
   const response = await fetch(
-    `${BASE_URL}/player/${accountId}/${eventId}/${sessionId}/${userId}`
+    `${BASE_URL}/player/${accountId}/${eventId}/${userId}`
   );
   const data = await response.json();
   return data;
@@ -51,7 +51,6 @@ function App() {
   const history = useHistory();
   const query = useQuery();
 
-  const [_triviaId, setTriviaId] = useState(null);
   const [_pin, setPin] = useState(null);
   const [_playerName, setPlayerName] = useState(null);
   const [_isHost, setIsHost] = useState(true);
@@ -69,7 +68,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       if (accountId && eventId && sessionId && userId) {
-        const { triviaId, pin } = await getTriviaIdForSession(
+        const { trivia, pin } = await getTriviaForSession(
           accountId,
           eventId,
           sessionId
@@ -81,7 +80,7 @@ function App() {
           userId
         );
 
-        setTriviaId(triviaId);
+        setTrivia(trivia);
         setPin(pin);
         setPlayerName(playerName);
         setIsHost(isHost);
@@ -96,7 +95,7 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Home
-            triviaId={_triviaId}
+            triviaId={trivia}
             isHost={_isHost}
             playerName={_playerName}
             pin={_pin}
