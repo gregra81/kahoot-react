@@ -43,7 +43,7 @@ const HostLobby = (props) => {
 
   return (
     <React.Fragment>
-      <body className="bg-primary">
+      <body>
         <div className="container d-flex align-items-center flex-column">
           <h2 className="pin-host-lobby masthead-heading text-uppercase mb-0 text-white">
             The PIN is {pin}

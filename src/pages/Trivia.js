@@ -19,13 +19,13 @@ const Trivia = (props) => {
 
   return props.triviaData ? (
     <React.Fragment>
-      <body id="page-top" className="bg-primary">
+      <body id="page-top">
         <div>
           <div className="text-center text-white bg-secondary text-uppercase">
             <Countdown socket={socketHost} />
           </div>
 
-          <Alert className="container bg-primary question-and-minipodium d-flex flex-nowrap  text-center text-uppercase text-secondary">
+          <Alert className="container question-and-minipodium d-flex flex-nowrap  text-center text-uppercase text-secondary">
             <Alert className="item1 bg-secondary shadow-lg">
               <Questions className="item1 shadow-lg" triviaData={props.triviaData} />
             </Alert>
@@ -48,10 +48,10 @@ const Trivia = (props) => {
               </button>
             ))}
           </div>
-          <div className="bg-primary">
+          <div>
             <br />
           </div>
-          <div className="text-center text-white bg-primary text-uppercase">
+          <div className="text-center text-white text-uppercase">
             <button
               className="next-question btn btn-secondary border-light"
               onClick={() => socketHost.emit('next-question')}
