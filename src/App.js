@@ -14,6 +14,7 @@ import TriviaUser from './pages/TriviaUser';
 import UserHome from './pages/UserHome';
 import UserLobby from './pages/UserLobby';
 import WaitQuestion from './pages/WaitQuestion';
+import { stringify } from 'query-string';
 
 let BASE_URL = config.serverUrl;
 
@@ -34,8 +35,9 @@ async function getTriviaForSession(accountId, eventId, sessionId) {
 }
 
 async function getPlayer(accountId, eventId, userId) {
+  const params = stringify({accountId, eventId, userId})
   const response = await fetch(
-    `${BASE_URL}/player/${accountId}/${eventId}/${userId}`
+    `${BASE_URL}/player?${params}`
   );
   const data = await response.json();
   return data;

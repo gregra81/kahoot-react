@@ -6,17 +6,10 @@ import ImagePng from '../assets/image.png'
 import config from '../config';
 import { stringify } from 'query-string';
 
-const getUserData = (search) => {
-  const {pin = 553530, playerName = 'defaultUserName'} = search;
-  return new Promise(resolve => (
-    setTimeout(() => resolve({pin, playerName }), 500)
-  )
-)};
-
 const UserLobby = (props) => {
   const history = useHistory();
   const data = useLocation();
-  const [ userPin, setUserPin ] = useState(null);
+  const [ gamePin, setGamePin ] = useState(null);
   const [ userName, setUserName ] = useState(null);
 
   useEffect(() => {
@@ -35,8 +28,7 @@ const UserLobby = (props) => {
         console.log(url)
         const res  = await fetch(url);
         const { playerName } = await res.json();
-        console.log(data);
-        setUserPin(sessionId);
+        setGamePin(sessionId);
         setUserName(playerName);
       }
     }
@@ -46,16 +38,16 @@ const UserLobby = (props) => {
   const { setSocketUser, socketUser, BASE_URL } = props;
 
   useEffect(() => {
-    if (userPin && userName) {
+    if (gamePin && userName) {
       if (!socketUser) {
         let newSocketUser;
   
         if (BASE_URL === 'http://localhost:3030') {
-          newSocketUser = socketIO(`/${userPin}`, {
+          newSocketUser = socketIO(`/${gamePin}`, {
             query: `playerName=${userName}`,
           });
         } else {
-          newSocketUser = socketIO(`${BASE_URL}/${userPin}`, {
+          newSocketUser = socketIO(`${BASE_URL}/${gamePin}`, {
             query: `playerName=${userName}`,
           });
         }
@@ -70,10 +62,10 @@ const UserLobby = (props) => {
         });
       }
     }
-  }, [history, props, setSocketUser, socketUser, BASE_URL, userPin, userName]);
+  }, [history, props, setSocketUser, socketUser, BASE_URL, gamePin, userName]);
   return (
     <body>
-      {userPin && userName ? (
+      {gamePin && userName ? (
         <div className='main-wrapper'>
           <div className='image-wrapper'>
             <img
