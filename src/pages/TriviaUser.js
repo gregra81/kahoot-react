@@ -54,25 +54,26 @@ const Trivia = (props) => {
         </div>
         <div className="divider-custom-line"></div>
       </div>
-      <div className="container bg-primary answers d-flex justify-content-between flex-wrap">
-        {props.triviaData.options.map((option, index) => (
-          <button
-            id={`answer${index}`}
-            key={`index-${index}`}
-            className={`answer-trivia${index}  text-white text-center answer-trivia d-flex flex-wrap w-100 border p-3 ${isDisabled} ${
-              isClicked === option.description ? 'selected' : ''
-            }`}
-            onClick={() => {
-              setIsClicked(option.description);
-              setIsDisabled('clicked');
-              socketUser.emit('answer', option.id);
-              socketUser.emit('show-mini-podium');
-            }}
-          >
-            {option.description}
-          </button>
-        ))}
-      </div>
+      {!isClicked &&
+        <div className="container answers d-flex justify-content-between flex-wrap">
+          {props.triviaData.options.map((option, index) => (
+            <button
+              id={`answer${index}`}
+              key={`index-${index}`}
+              className={`answer-trivia${index}  text-white text-center answer-trivia d-flex flex-wrap w-100 border p-3 ${isDisabled} ${
+                isClicked === option.description ? 'selected' : ''
+              }`}
+              onClick={() => {
+                setIsClicked(option.description);
+                setIsDisabled('clicked');
+                socketUser.emit('answer', option.id);
+                socketUser.emit('show-mini-podium');
+              }}
+            >
+              {option.description}
+            </button>
+          ))}
+        </div>}
       <br />
       <Container>
         <StopGame

@@ -37,7 +37,7 @@ const Trivia = (props) => {
             <h3>Answers</h3>
           </div>
 
-          <div className="container bg-primary answers d-flex justify-content-between flex-wrap">
+          <div className="container answers d-flex justify-content-between flex-wrap">
             {props.triviaData.options.map((option, index) => (
               <button
                 id={`answer${index}`}
