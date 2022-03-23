@@ -23,7 +23,6 @@ const UserLobby = (props) => {
       const { sessionId, userEmail } = search;
       if (sessionId && userEmail) {
         const { pin, playerName }  = await getUserData(search, sessionId, userEmail);
-        console.log(pin, playerName)
         setUserPin(pin);
         setUserName(playerName);
       }

@@ -1,0 +1,12 @@
+.wait_container {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.text_container{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
