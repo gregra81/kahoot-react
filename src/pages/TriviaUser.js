@@ -25,7 +25,7 @@ const Trivia = (props) => {
         if (counter === 0 ) {
           timer.current = setTimeout(() => {
             props.history.push('/user/wait_question');
-          }, 10000);
+          }, 1000);
         }
       });
     }
