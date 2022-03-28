@@ -1,44 +1,41 @@
 import React from 'react';
-import StopGame from '../components/StopGame';
 import '../styles/Podium.css';
 import Container from 'react-bootstrap/Container';
+import priseUrl from '../assets/prise.gif'
+
 const Podium = (props) => {
+  const rankingData = Object.entries(props.ranking);
   return (
-    <React.Fragment>
-      <body>
-        <Container>
-          <div>
-            {Object.entries(props.ranking).map(([keyValue, value]) => {
-              return (
-                <div>
-                  <Container>
-                    <h1 className="text-center text-dark" key={keyValue}>
-                      {[value.name]} has {[value.score]} points
-                    </h1>
-                  </Container>
-                  <div className="divider-custom divider-light">
-                    <div className="divider-custom-line"></div>
-                    <div className="divider-custom-icon">
-                      <i className="fas fa-star"></i>
-                    </div>
-                    <div className="divider-custom-line"></div>
+    <Container>
+      <div className='podium-wrapper'>
+        <div className='podium-header'>
+          And the winner is...
+        </div>
+        <div className='prise-image-wrapper'>
+          <img className='prise-image' src={priseUrl} alt="" />
+        </div>
+        <div className='ranking-container'>
+          {rankingData.map(([keyValue, {name, score}]) => {
+            const key = parseInt(keyValue, 10);
+            const currentRank = key + 1;
+            const notLast = currentRank !== rankingData.length ? 'user-separator' : '';
+            return (
+              <>
+                <div key={key} className={`d-flex justified-content ${notLast}`}>
+                  <div className='user-position'>
+                    <span>{currentRank}</span></div>
+                  <div className='user-name'>{name}</div>
+                  <div className='user-score-section'>
+                    <span className='user-score'>{score }</span>
+                    <span>Pts</span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </Container>
-
-        <Container>
-          <StopGame
-            socket={props.socket}
-            socketUser={props.socketUser}
-            setSocketUser={props.setSocketUser}
-            setSocket={props.setSocket}
-          />
-        </Container>
-      </body>
-    </React.Fragment>
+              </>
+            );
+          })}
+        </div>
+      </div>
+    </Container>
   );
 };
 

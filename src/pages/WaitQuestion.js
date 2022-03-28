@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import '../styles/WaitQuestion.css';
+import sonicImg from '../assets/sonic.gif';
 
 const WaitQuestion = (props) => {
   const { socketUser, setTriviaDataUser, history } = props;
@@ -14,10 +15,15 @@ const WaitQuestion = (props) => {
   return (
     <body>
       <div className='wait_container h-center v-center'>
-        <div className='text_container'>
-          Next question coming soon.
+        <div className='text_container header_text'>
+          Next question coming soon...
         </div>
-        <div className='text_container'>
+        <div className='image-holder'>
+          <div className='image-wrapper'>
+            <img className="sonic-image" src={sonicImg} alt="" />
+          </div>
+        </div>
+        <div className='text_container footer_text'>
           Be prepared and listen carefully
         </div>
       </div>
