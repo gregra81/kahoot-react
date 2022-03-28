@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Questions from '../components/Questions';
 import Countdown from '../components/Countdown';
 import '../styles/TriviaUser.css';
@@ -9,11 +9,15 @@ const Trivia = (props) => {
   const [isClicked, setIsClicked] = useState('');
   const [isDisabled, setIsDisabled] = useState('');
   const [counter, setCounter] = useState(20);
-  const timer = useRef();
-
 
   const onGameEnd = props.onGameEnd;
   const { socketUser } = props;
+
+  const switchPage = useCallback(() => {
+    setTimeout(() => {
+      props.history.push('/user/wait_question');
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (socketUser) {
@@ -22,17 +26,15 @@ const Trivia = (props) => {
       });
       socketUser.on('timer', (counter) => {
         setCounter(counter);
-        if (counter === 0 ) {
-          timer.current = setTimeout(() => {
-            props.history.push('/user/wait_question');
-          }, 1000);
+        if (counter === 0 && !isClicked) {
+          switchPage();
         }
       });
     }
     setIsClicked(false);
     setIsDisabled('');
     return () => {};
-  }, [onGameEnd, socketUser, props.history]);
+  }, [onGameEnd, socketUser, props.history, isClicked, switchPage]);
 
   return props.triviaData ? (
     <body>
@@ -40,26 +42,19 @@ const Trivia = (props) => {
         <Countdown counter={counter} />
       </div>
 
-      <Container className="d-flex align-items-center justify-content-center text-center">
-        <Alert className="item1 d-flex align-items-center justify-content-center bg-secondary text-center shadow-lg">
+      <Container className="d-flex align-items-center justify-content-center text-center question-container">
+        <Alert className="d-flex align-items-center justify-content-center text-center">
           <Questions triviaData={props.triviaData} />
         </Alert>
       </Container>
 
-      <div className="divider-custom divider">
-        <div className="divider-custom-line"></div>
-        <div className="divider-custom-icon">
-          <i className="fas fa-star"></i>
-        </div>
-        <div className="divider-custom-line"></div>
-      </div>
+      <div className="divider-custom divider" />
       {!isClicked &&
         <div className="container answers d-flex justify-content-between flex-wrap">
           {props.triviaData.options.map((option, index) => (
             <button
-              id={`answer${index}`}
               key={`index-${index}`}
-              className={`answer-trivia${index}  text-white text-center answer-trivia d-flex flex-wrap w-100 border p-3 ${isDisabled} ${
+              className={`text-center answer-trivia d-flex flex-wrap w-100 p-2 ${isDisabled} ${
                 isClicked === option.description ? 'selected' : ''
               }`}
               onClick={() => {
@@ -67,6 +62,7 @@ const Trivia = (props) => {
                 setIsDisabled('clicked');
                 socketUser.emit('answer', option.id);
                 socketUser.emit('show-mini-podium');
+                switchPage();
               }}
             >
               {option.description}

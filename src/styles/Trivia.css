@@ -1,9 +1,29 @@
 .item1 {
-  margin: 10px;
+  margin-top: 10px;
+  padding: 0;
+}
+
+.question-container {
+  padding: 0;
+  margin-top: 50px;
 }
 
 .question-and-minipodium {
   justify-content: space-between;
+}
+
+.question{
+  background-color: #3A8CF6;
+  border-radius: 2rem;
+  padding: 3.5rem 2rem;
+  margin-bottom: 0;
+}
+
+.header-text {
+  font-weight: 600;
+  font-size: 2.1rem;
+  line-height: 1.3;
+  color: white;
 }
 
 .selected {
@@ -32,6 +52,20 @@
 }
 
 .answer-trivia{
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  justify-content: center;
+  border: 2px solid #3A8CF6;
+  background-color: white;
+  color: #3A8CF6;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.divider{
+  margin: 1.8rem 0;
 }

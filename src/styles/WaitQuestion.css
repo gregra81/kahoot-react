@@ -1,7 +1,6 @@
 .wait_container {
   display: flex;
   justify-content: center;
-  font-size: 30px;
   width: 300px;
   margin: 0 auto;
 }
@@ -9,4 +8,30 @@
 .text_container{
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.header_text{
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 250px;
+}
+
+.footer_text{
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 200px;
+  padding-top: 50px;
+}
+
+.sonic-image{
+  height: 350px;
+}
+
+.image-holder {
+  margin-bottom: -20px;
+  margin-top: -30px;
+  overflow: hidden;
+  height: 330px;
 }
