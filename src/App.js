@@ -14,6 +14,7 @@ import TriviaUser from "./pages/TriviaUser";
 import UserHome from "./pages/UserHome";
 import UserLobby from "./pages/UserLobby";
 import WaitQuestion from "./pages/WaitQuestion";
+import AnswerCheck from "./pages/AnswerCheck";
 import { stringify } from 'query-string';
 
 let BASE_URL = config.serverUrl;
@@ -141,6 +142,9 @@ function App() {
             socketUser={socketUser}
             setTriviaDataUser={setTriviaDataUser}
           />
+        </Route>
+        <Route path="/user/check_answer">
+          <AnswerCheck history={history} />
         </Route>
         <Route path="/user/wait_question">
           <WaitQuestion

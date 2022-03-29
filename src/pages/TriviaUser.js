@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Questions from '../components/Questions';
 import Countdown from '../components/Countdown';
 import '../styles/TriviaUser.css';
@@ -9,32 +9,48 @@ const Trivia = (props) => {
   const [isClicked, setIsClicked] = useState('');
   const [isDisabled, setIsDisabled] = useState('');
   const [counter, setCounter] = useState(20);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
 
   const onGameEnd = props.onGameEnd;
   const { socketUser } = props;
 
-  const switchPage = useCallback(() => {
-    setTimeout(() => {
-      props.history.push('/user/wait_question');
-    }, 100);
+  const switchPage = () => {
+    if (counter === 0 && !isClicked && !isAnswerChecked) {
+      setTimeout(() => {
+        props.history.push('/user/wait_question');
+      }, 10000);
+    }
+  };
+
+  useEffect(() => {
+    setIsClicked(false);
+    setIsDisabled('');
   }, []);
+
+  useEffect(() => {
+    if (socketUser) {
+      socketUser.on('timer', (counter) => {
+        setCounter(counter);
+        switchPage();
+      });
+    }
+  }, [socketUser]);
 
   useEffect(() => {
     if (socketUser) {
       socketUser.on('podium', (podium) => {
         onGameEnd(podium);
       });
-      socketUser.on('timer', (counter) => {
-        setCounter(counter);
-        if (counter === 0 && !isClicked) {
-          switchPage();
-        }
+      socketUser.on('answer-check', (data) => {
+        setIsAnswerChecked(true)
+        props.history.push('/user/check_answer', { ...data });
       });
     }
-    setIsClicked(false);
-    setIsDisabled('');
-    return () => {};
-  }, [onGameEnd, socketUser, props.history, isClicked, switchPage]);
+  }, [
+    onGameEnd,
+    socketUser,
+    props.history,
+  ]);
 
   return props.triviaData ? (
     <body>
@@ -47,7 +63,6 @@ const Trivia = (props) => {
           <Questions triviaData={props.triviaData} />
         </Alert>
       </Container>
-
       <div className="divider-custom divider" />
       {!isClicked &&
         <div className="container answers d-flex justify-content-between flex-wrap">
@@ -62,7 +77,6 @@ const Trivia = (props) => {
                 setIsDisabled('clicked');
                 socketUser.emit('answer', option.id);
                 socketUser.emit('show-mini-podium');
-                switchPage();
               }}
             >
               {option.description}
