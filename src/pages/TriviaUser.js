@@ -9,18 +9,9 @@ const Trivia = (props) => {
   const [isClicked, setIsClicked] = useState('');
   const [isDisabled, setIsDisabled] = useState('');
   const [counter, setCounter] = useState(20);
-  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
 
   const onGameEnd = props.onGameEnd;
   const { socketUser } = props;
-
-  const switchPage = () => {
-    if (counter === 0 && !isClicked && !isAnswerChecked) {
-      setTimeout(() => {
-        props.history.push('/user/wait_question');
-      }, 10000);
-    }
-  };
 
   useEffect(() => {
     setIsClicked(false);
@@ -29,12 +20,21 @@ const Trivia = (props) => {
 
   useEffect(() => {
     if (socketUser) {
-      socketUser.on('timer', (counter) => {
-        setCounter(counter);
-        switchPage();
-      });
+      socketUser.on('timer', currentTimerHandler);
     }
-  }, [socketUser]);
+  }, [socketUser]); //eslint-disable-line
+
+  const currentTimerHandler = (currentCounter) => {
+    setCounter(currentCounter);
+    if (currentCounter <= 0) {
+      setTimeout(() => {
+        if (window.location.pathname !== '/user/wait_question'
+        || window.location.pathname !== '/user/check_answer') {
+          props.history.push('/user/wait_question');
+        }
+      }, 1000);
+    }
+  }
 
   useEffect(() => {
     if (socketUser) {
@@ -42,15 +42,11 @@ const Trivia = (props) => {
         onGameEnd(podium);
       });
       socketUser.on('answer-check', (data) => {
-        setIsAnswerChecked(true)
         props.history.push('/user/check_answer', { ...data });
+        socketUser.removeListener('timer', currentTimerHandler);
       });
     }
-  }, [
-    onGameEnd,
-    socketUser,
-    props.history,
-  ]);
+  }, [onGameEnd, socketUser, props.history]);  //eslint-disable-line
 
   return props.triviaData ? (
     <body>
