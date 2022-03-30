@@ -7,7 +7,7 @@ import '../styles/AnswerCheck.css'
 const AnswerCheck = ({ history }) => {
 
   useEffect(() => {
-    setTimeout(() => history.push('/user/wait_question'), 2000)
+    setTimeout(() => history.push('/user/wait_question'), 5000)
   }, []); //eslint-disable-line
 
   const { state } = useLocation();
