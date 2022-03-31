@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import priseUrl from '../assets/prise.gif'
 
 const Podium = (props) => {
-  const rankingData = Object.entries(props.ranking);
+  const rankingData = (Object.entries(props.ranking)).slice(0, 4);
   return (
     <Container>
       <div className='podium-wrapper'>
